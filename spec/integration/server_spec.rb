@@ -1,15 +1,16 @@
 require 'spec_helper'
 
 describe "server" do
-  #after(:all) do
-  #  Celluloid.shutdown
-  #  Celluloid.boot
-  #end
+  after(:all) do
+    CarbonMU.shutdown
+  end
+  before(:all) do
+    CarbonMU.start_in_background
+    sleep(2)
+  end
 
   it 'accepts connections' do
-    #CarbonMU.start_in_background
-    #s = TCPSocket.new'localhost', 8421
-    #s.write("test!")
-    #s.readpartial(4096).should match(/Connected/) # TODO Fix this once we have a ping command.
+    s = TCPSocket.new'localhost', 8421
+    s.readpartial(4096).should match(/Connected/)
   end
 end

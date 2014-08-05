@@ -11,6 +11,7 @@ module CarbonMU
   class << self
     attr_accessor :configuration
     attr_accessor :overlord_receive_port
+    attr_reader :overlord_supervision_group, :server_supervision_group
   end
   self.configuration = Configuration.new
 
@@ -19,19 +20,24 @@ module CarbonMU
   end
 
   def self.start
-    OverlordSupervisionGroup.run
+    @overlord_supervision_group = OverlordSupervisionGroup.run
   end
 
   def self.start_in_background
-    OverlordSupervisionGroup.run!
+    @overlord_supervision_group = OverlordSupervisionGroup.run!
   end
 
   def self.start_server
-    ServerSupervisionGroup.run
+    @server_supervision_group = ServerSupervisionGroup.run
   end
 
   def self.start_server_in_background
-    ServerSupervisionGroup.run!
+    @server_supervision_group = ServerSupervisionGroup.run!
+  end
+
+  def self.shutdown
+    @overlord_supervision_group.finalize
+    @server_supervision_group.finalize
   end
 end
 
